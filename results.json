@@ -1,0 +1,46 @@
+{
+  "_comment": "Per-target ground truth for the l4s-disprove-benchmark. Single machine-readable source mapping each target to its regime, method, witness, outcome, and certified axiom set. Validated against the Lean `#print axioms` output by scripts/check_all.sh (via scripts/validate_results.py), so it cannot silently drift from L4sDisproveBenchmark/Benchmark.lean. The paper's Table (tab:main) aggregates are derivable from `targets` below.",
+  "paper": {
+    "title": "Lean Disprove: Certified Counterexample Search for AI-Assisted Formal Mathematics",
+    "authors": ["Jan Ondras", "Cameron Freer"],
+    "venue": "3rd AI for Math Workshop (ICML 2026)",
+    "url": "https://openreview.net/forum?id=5ck1jRE65S"
+  },
+  "axiom_whitelist": ["propext", "Classical.choice", "Quot.sound"],
+  "summary": {
+    "targets": 16,
+    "false": 15,
+    "true_control": 1,
+    "regimes": {
+      "decidable-finite": 10,
+      "bounded-N": 3,
+      "out-of-window": 1,
+      "nonlinear-Z": 1,
+      "true-control": 1
+    },
+    "cumulative_certified_of_15_false": {
+      "decide": 10,
+      "+enumerate": 13,
+      "+widening": 14,
+      "+external": 15
+    }
+  },
+  "targets": [
+    {"name": "easy_bad",   "decl": "L4sDisproveBenchmark.Benchmark.easy_bad_refutation",   "proposition": "∀ n : Fin 5, n.val < 3",              "shape": 1, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": "n = 3",          "axioms": [],                                            "paper_listing": "Listing 1 (EasyBad.lean)"},
+    {"name": "fin10_ne7",  "decl": "L4sDisproveBenchmark.Benchmark.fin10_ne7_refutation",  "proposition": "∀ n : Fin 10, n.val ≠ 7",             "shape": 1, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": "n = 7",          "axioms": [],                                            "paper_listing": null},
+    {"name": "fin8_even",  "decl": "L4sDisproveBenchmark.Benchmark.fin8_even_refutation",  "proposition": "∀ n : Fin 8, n.val % 2 = 0",          "shape": 1, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": "n = 1",          "axioms": [],                                            "paper_listing": null},
+    {"name": "medium_bad", "decl": "L4sDisproveBenchmark.Benchmark.medium_bad_refutation", "proposition": "∀ n : ℕ, n^2 ≤ n * 10",               "shape": 1, "regime": "bounded-N",        "method": "enumerate",          "expected_outcome": "REFUTED",      "witness": "n = 11",         "axioms": ["propext", "Classical.choice", "Quot.sound"], "paper_listing": "MediumBad.lean (RUNS.md)"},
+    {"name": "euler",      "decl": "L4sDisproveBenchmark.Benchmark.euler_refutation",      "proposition": "∀ n : ℕ, Nat.Prime (n^2 + n + 41)",   "shape": 1, "regime": "bounded-N",        "method": "enumerate",          "expected_outcome": "REFUTED",      "witness": "n = 40",         "axioms": ["propext"],                                   "paper_listing": null},
+    {"name": "hard_bad",   "decl": "L4sDisproveBenchmark.Benchmark.hard_bad_is_false",     "proposition": "∀ n : ℕ, n^2 ≤ n * 1000",             "shape": 1, "regime": "out-of-window",    "method": "enumerate+widening", "expected_outcome": "REFUTED",      "witness": "n = 1001",       "axioms": ["propext", "Classical.choice", "Quot.sound"], "paper_listing": "Listing 2 (HardBad.lean:5)"},
+    {"name": "fin5_lt5",   "decl": "L4sDisproveBenchmark.Benchmark.fin5_lt5_true",         "proposition": "∀ n : Fin 5, n.val < 5",              "shape": 1, "regime": "true-control",     "method": "decide-cascade",     "expected_outcome": "INCONCLUSIVE", "witness": null,             "axioms": [],                                            "paper_listing": null, "note": "true statement; the tool correctly returns no counterexample (no false positive)"},
+    {"name": "fin12_div",  "decl": "L4sDisproveBenchmark.Benchmark.fin12_div_refutation",  "proposition": "∀ n : Fin 12, 2 ∣ n.val → 3 ∣ n.val", "shape": 2, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": "n = 2",          "axioms": ["propext"],                                   "paper_listing": null},
+    {"name": "natle5_sq",  "decl": "L4sDisproveBenchmark.Benchmark.natle5_sq_refutation",  "proposition": "∀ n : ℕ, n ≤ 5 → n^2 ≤ 20",           "shape": 2, "regime": "bounded-N",        "method": "enumerate",          "expected_outcome": "REFUTED",      "witness": "n = 5",          "axioms": ["propext", "Classical.choice", "Quot.sound"], "paper_listing": null},
+    {"name": "fin5_gt10",  "decl": "L4sDisproveBenchmark.Benchmark.fin5_gt10_refutation",  "proposition": "∃ n : Fin 5, n.val > 10",             "shape": 3, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": ["propext", "Quot.sound"],                     "paper_listing": null, "note": "∃ is false (no element satisfies it); refutation is ∀ n, ¬P, so no witness"},
+    {"name": "fin6_succ",  "decl": "L4sDisproveBenchmark.Benchmark.fin6_succ_refutation",  "proposition": "∃ n : Fin 6, n.val = n.val + 1",      "shape": 3, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": ["propext", "Quot.sound"],                     "paper_listing": null},
+    {"name": "pow2",       "decl": "L4sDisproveBenchmark.Benchmark.pow2_refutation",       "proposition": "(2 : ℕ)^10 = 1000",                   "shape": 6, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": ["propext"],                                   "paper_listing": null, "note": "false: 2^10 = 1024"},
+    {"name": "fact5",      "decl": "L4sDisproveBenchmark.Benchmark.fact5_refutation",      "proposition": "Nat.factorial 5 ≤ 100",               "shape": 6, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": [],                                            "paper_listing": null, "note": "false: 5! = 120"},
+    {"name": "div7",       "decl": "L4sDisproveBenchmark.Benchmark.div7_refutation",       "proposition": "7 ∣ 100",                             "shape": 6, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": ["propext"],                                   "paper_listing": null, "note": "false: 100 = 14·7 + 2"},
+    {"name": "prime91",    "decl": "L4sDisproveBenchmark.Benchmark.prime91_refutation",    "proposition": "Nat.Prime 91",                        "shape": 7, "regime": "decidable-finite", "method": "decide-cascade",     "expected_outcome": "REFUTED",      "witness": null,             "axioms": ["propext", "Classical.choice", "Quot.sound"], "paper_listing": null, "note": "false: 91 = 7·13"},
+    {"name": "smt_bad",    "decl": "L4sDisproveBenchmark.Benchmark.smt_bad_refutation",    "proposition": "∀ x y : ℤ, 2*x^2 - 3*y^2 ≠ 5",        "shape": 1, "regime": "nonlinear-Z",      "method": "external (Z3)",      "expected_outcome": "REFUTED",      "witness": "(x, y) = (−4, 3)", "axioms": ["propext", "Quot.sound"],                   "paper_listing": "Listing 3 (SmtBad.lean:8)"}
+  ]
+}

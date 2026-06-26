@@ -1,0 +1,15 @@
+name = "l4s-disprove-benchmark"
+version = "0.1.0"
+defaultTargets = ["L4sDisproveBenchmark"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+version = "git#v4.29.1"
+
+[[lean_lib]]
+name = "L4sDisproveBenchmark"
+# Build the root + every submodule independently. The per-shape artifact files each
+# define a root-namespace `T_counterexample`, so they must be compiled standalone
+# (never imported into one environment together).
+globs = ["L4sDisproveBenchmark.+"]
